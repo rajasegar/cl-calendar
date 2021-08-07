@@ -9,15 +9,13 @@
                "cl-ppcre"
                "uiop"
 
-               ;; for @route annotation
-               "cl-syntax-annot"
-
                ;; HTML Template
                "djula"
 
                ;; for DB
                "datafly"
-               "sxql")
+	       ;; date time
+               "local-time")
   :components ((:module "src"
                 :components
                 ((:file "main" :depends-on ("config" "view" "db"))
