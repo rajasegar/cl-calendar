@@ -23,6 +23,15 @@
 (defvar *day-names* '("Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" ))
 (defvar *month-names* '("January" "February" "March" "April" "May" "June" "July" "August" "September"  "October" "November" "December"))
 
+(defun get-date (year month date)
+  )
+
+(defun get-day (year month date)
+  )
+(defun get-calendar-rows (month year)
+  (let* ((days-in-month (- 32 ))))
+  )
+
 ;;
 ;; Routing rules
 
