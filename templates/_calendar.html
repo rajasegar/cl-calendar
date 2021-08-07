@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h2 id="current-month">{{monthYear}}</h2>
+  <div class="text-success" hidden="''" data-activity-indicator="''"></div>
+  <div>
+    <button class="btn btn-secondary me-2 btn-sm" type="button" hx-get="/today" hx-target="#calendar" data-bs-toggle="tooltip" data-bs-placement="top" title="today">Today</button>
+    <button class="btn btn-secondary ms-2 btn-sm" type="button" hx-get="/previous" hx-target="#calendar" data-bs-toggle="tooltip" 
+            data-bs-placement="top" 
+            title="Previous Month">
+      {% include "svgs/chevron-left.html" %}
+    </button>
+    <button class="btn btn-secondary ms-2 btn-sm" type="button" hx-get="/next" hx-target="#calendar"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Next Month">
+      {% include "svgs/chevron-right.html" %}
+    </button>
+
+  </div>
+  
+</div>
+
+<table class="table table-bordered mt-2" id="'calendar-'">
+  <thead class="table-dark">
+    <tr class="text-center">
+      {% for name in day-names %}
+      <th style="'width:14%'">{{name}}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr class="table-light">
+      {% for col in row %}
+      <td id=tdId class=""
+          hx-get="/modal?date=" + col + "-" + currentMonth + "-" + currentYear
+          hx-target="#modals-here"
+          hx-trigger="click"
+          _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop"
+          >
+        <span>{{col}}</span>
+        <div class="mt-2" id="events-" + col + "-" + currentMonth + "-" + currentYear
+             style="height:65px;overflow-y:auto">
+        </div>
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div id="modals-her"></div>e

@@ -1,0 +1,14 @@
+{% extends "layouts/default.html" %}
+{% block title %}Calendar - Common Lisp{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="card mt-3">
+    <div class="card-header">
+      <h1>Calendar</h1>
+    </div>
+    <div id="calendar" class="card-body">
+      {% include "_calendar.html" %}
+    </div>
+  </div>
+</div>
+{% endblock %}
