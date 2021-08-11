@@ -1,0 +1,53 @@
+<div id="modal-backdrop" class="modal-backdrop fade show" style="display:block"></div>
+<div id="eventModal" class="modal fade show" tabindex="'-1'" aria-labelledby="'eventModalLabel'" aria-hidden="true" style="display:block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form hx-post="/events">
+	<input name="date" type="hidden" value="{{date}}"/>
+	<input name="month" type="hidden" value="{{month}}"/>
+	<input name="year" type="hidden" value="{{year}}"/>
+	<div class="modal-header">
+	  <h5 id="eventModalLabel" class="modal-title"> New Event - {{date}} {{month-name}}</h5>
+	  <button class="btn-close" type="'button'" onclick="closeModal()" aria-label="Close"></button>
+	</div>
+	<div class="modal-body">
+	  <div class="mb-3">
+	    <label class="form-label" for="">Time:</label>
+	    <select class="form-select" id="" name="time">
+	      <option value="1:00">1:00</option>
+	      <option value="2:00">2:00</option>
+	      <option value="3:00">3:00</option>
+	      <option value="4:00">4:00</option>
+	      <option value="5:00">5:00</option>
+	      <option value="6:00">6:00</option>
+	      <option value="7:00">7:00</option>
+	      <option value="8:00">8:00</option>
+	      <option value="9:00">9:00</option>
+	      <option value="10:00">10:00</option>
+	      <option value="11:00">11:00</option>
+	      <option value="12:00">12:00</option>
+	    </select>
+	  </div>
+	  <div class="mb-3">
+	    <div class="form-check form-check-inline">
+	      <input class="form-check-input" name="ampm" type="radio" value="AM" checked="true"/>
+	      <label class="form-check-label" for="">AM</label>
+	    </div>
+
+	    <div class="form-check form-check-inline">
+	      <input class="form-check-input" name="ampm" type="radio" value="PM"/>
+	      <label class="form-check-label" for="">PM</label>
+	    </div>
+	    <div class="form-group my-3">
+	      <textarea id="calendar_event_description" class="form-control" cols="30" name="description" rows="10" placeholder="Description for this event" required></textarea>
+	    </div>
+	  </div>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn btn-secondary" type="'button'" onclick="closeModal()">Close</button>
+	  <button class="btn btn-primary" type="'submit'" onclick="closeModal()"> Save changes</button>
+	</div>
+    </div>
+    </form>
+  </div>
+</div>

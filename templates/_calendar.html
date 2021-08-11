@@ -31,14 +31,14 @@
     {% for row in rows %}
     <tr class="table-light">
       {% for col in row %}
-      <td id=tdId class=""
-          hx-get="/modal?date=" + col + "-" + currentMonth + "-" + currentYear
+      <td class="{% if col == current-date and month == current-month and year == current-year %}bg-success text-white{% endif %}"
+          hx-get="/modal?date={{col}}&month={{month}}&year={{year}}"
           hx-target="#modals-here"
           hx-trigger="click"
           _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop"
           >
         <span>{{col}}</span>
-        <div class="mt-2" id="events-" + col + "-" + currentMonth + "-" + currentYear
+        <div class="mt-2" id="events-{{col}}-{{current-month}}-{{current-year}}"
              style="height:65px;overflow-y:auto">
         </div>
       </td>

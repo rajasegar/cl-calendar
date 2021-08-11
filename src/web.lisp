@@ -21,6 +21,8 @@
 (defvar *day-names* '("Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" ))
 (defvar *month-names* '("January" "February" "March" "April" "May" "June" "July" "August" "September"  "October" "November" "December"))
 
+(defun get-param (name parsed)
+  (cdr (assoc name parsed :test #'string=)))
 
 (defun get-calendar-rows (month year)
   (let* ((days-in-month (local-time:days-in-month month year))
@@ -49,49 +51,119 @@
 		(setf (aref calendar i) temp)))
       calendar))
 
+(defun get-current-month ()
+  (parse-integer (local-time:format-timestring nil (local-time:now) :format (list :month))))
+
+(defun get-current-year ()
+  (parse-integer (local-time:format-timestring nil (local-time:now) :format (list :year))))
+
+(defun get-current-date ()
+  (parse-integer (local-time:format-timestring nil (local-time:now) :format (list :day))))
+
 ;;
 ;; Routing rules
 
 (defroute "/" ()
-  (let* ((month (parse-integer (local-time:format-timestring nil (local-time:now) :format (list :month))))
-	 (year (parse-integer (local-time:format-timestring nil (local-time:now) :format (list :year))))
-	 (next-month (1+ month))
-	 (prev-month (1- month)))
+  (let* ((month (get-current-month))
+	 (year (get-current-year)))
   (render #P"index.html" (list
 			  :day-names *day-names*
 			  :rows (get-calendar-rows month year)
-			  :next-month next-month
-			  :prev-month prev-month
+			  :next-month (1+ month)
+			  :prev-month (1- month)
 			  :year year
-			  :month-name (nth (1- month) *month-names*)))))
+			  :month-name (nth (1- month) *month-names*)
+			  :month month
+			  :current-date (get-current-date)
+			  :current-month (get-current-month)
+			  :current-year (get-current-year)))))
 
 
 (defroute "/next" (&key _parsed)
   (let* ((month (parse-integer (cdr (assoc "month" _parsed :test #'string=))))
-	(year (parse-integer (cdr (assoc "year" _parsed :test #'string=))))
-	(next-month (1+ month))
-	(prev-month (1- month)))
+	(year (parse-integer (cdr (assoc "year" _parsed :test #'string=)))))
+    (if (> month 12)
+	(progn 
+	  (setf month 1)
+	  (setf year (1+ year)))
+	nil)
   (render #P"_calendar.html" (list
 			  :day-names *day-names*
 			  :rows (get-calendar-rows month year)
-			  :next-month next-month
-			  :prev-month prev-month
+			  :next-month (1+ month)
+			  :prev-month (1- month)
 			  :year year
-			  :month-name (nth (1- month) *month-names*)))))
+			  :month-name (nth (1- month) *month-names*)
+			  :month month
+			  :current-date (get-current-date)
+			  :current-month (get-current-month)
+			  :current-year (get-current-year)))))
 
 (defroute "/previous" (&key _parsed)
   (print _parsed)
   (let* ((month (parse-integer (cdr (assoc "month" _parsed :test #'string=))))
-	(year (parse-integer (cdr (assoc "year" _parsed :test #'string=))))
-	(next-month (1+ month))
-	(prev-month (1- month)))
+	(year (parse-integer (cdr (assoc "year" _parsed :test #'string=)))))
+    (if (< month 1)
+	(progn
+	  (setf month 12)
+	  (setf year (1- year)))
+	nil)
   (render #P"_calendar.html" (list
 			  :day-names *day-names*
 			  :rows (get-calendar-rows month year)
-			  :next-month next-month
-			  :prev-month prev-month
+			  :next-month (1+ month)
+			  :prev-month (1- month)
 			  :year year
-			  :month-name (nth (1- month) *month-names*)))))
+			  :month-name (nth (1- month) *month-names*)
+			  :month month
+			  :current-date (get-current-date)
+			  :current-month (get-current-month)
+			  :current-year (get-current-year)))))
+;; Today
+(defroute "/today" ()
+  (let* ((month (parse-integer (local-time:format-timestring nil (local-time:now) :format (list :month))))
+	 (year (parse-integer (local-time:format-timestring nil (local-time:now) :format (list :year)))))
+  (render #P"_calendar.html" (list
+			  :day-names *day-names*
+			  :rows (get-calendar-rows month year)
+			  :next-month (1+ month)
+			  :prev-month (1- month)
+			  :year year
+			  :month-name (nth (1- month) *month-names*)
+			  :month month
+			  :current-date (get-current-date)
+			  :current-month (get-current-month)
+			  :current-year (get-current-year)))))
+
+;; Modal
+(defroute "/modal" (&key _parsed)
+  (let ((date (parse-integer (get-param "date" _parsed)))
+	(month (parse-integer (get-param "month" _parsed)))
+	(year (parse-integer (get-param "year" _parsed))))
+    (render #P"_modal.html" (list :date date
+				  :month month
+				  :year year
+				  :month-name (nth (1- month) *month-names*)))))
+
+;; Events
+(defroute ("/events" :method :POST) (&key _parsed)
+  (print _parsed)
+  (let (
+	(date (parse-integer (get-param "date" _parsed)))
+	(month (parse-integer (get-param "month" _parsed)))
+	(year (parse-integer (get-param "year" _parsed)))
+	(time  (get-param "time" _parsed))
+	(ampm  (get-param "ampm" _parsed))
+	(description (get-param "description" _parsed))
+	)
+  (render #P"_event.html" (list :date date
+				:month month
+				:year year
+				:time time
+				:ampm ampm
+				:description description))))
+
+
 
 ;;
 ;; Error pages
