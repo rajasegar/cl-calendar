@@ -33,9 +33,11 @@
       {% for col in row %}
       <td class="{% if col == current-date and month == current-month and year == current-year %}bg-success text-white{% endif %}"
           hx-get="/modal?date={{col}}&month={{month}}&year={{year}}"
-          hx-target="#modals-here"
+          hx-target="#new-event-form"
           hx-trigger="click"
-          _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop"
+	  data-bs-toggle="modal"
+	  data-bs-target="#eventModal"
+          __="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop"
           >
         <span>{{col}}</span>
         <div class="mt-2" id="events-{{col}}-{{current-month}}-{{current-year}}"
@@ -47,4 +49,10 @@
     {% endfor %}
   </tbody>
 </table>
-<div id="modals-here"></div>
+<div id="eventModal" class="modal fade" tabindex="'-1'" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="new-event-form">
+    </div>
+  </div>
+</div>
+
