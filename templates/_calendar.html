@@ -37,7 +37,6 @@
           hx-trigger="click"
 	  data-bs-toggle="modal"
 	  data-bs-target="#eventModal"
-          __="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop"
           >
         <span>{{col}}</span>
         <div class="mt-2" id="events-{{col}}-{{current-month}}-{{current-year}}"
