@@ -2,6 +2,7 @@
 
 A Calendar widget created in Common Lisp using the [local-time](https://cl-library-docs.github.io/common-lisp-libraries/local-time/) library.
 
+![htmx-calendar.gif](htmx-calendar.gif)
 
 ## Usage
 ```lisp
